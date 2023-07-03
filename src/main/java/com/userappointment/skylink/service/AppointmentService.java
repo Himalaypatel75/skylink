@@ -1,6 +1,7 @@
 package com.userappointment.skylink.service;
 
 import com.userappointment.skylink.models.Appointment;
+import com.userappointment.skylink.models.User;
 import com.userappointment.skylink.repository.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,14 @@ public class AppointmentService {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
-    public List<Appointment> getAllAppointment(){
-        return appointmentRepository.findAll();
+    public List<Appointment> getAllAppointment(User userDetails){
+        if (userDetails.getRole().getRoleName().equals("Admin")){
+            return appointmentRepository.findAll();
+        }else{
+//            return appointmentRepository.findAll();
+            return appointmentRepository.findByUserEmail(userDetails.getEmail());
+        }
+
     }
 
     public Optional<Appointment> getAppointment(Long id){

@@ -24,9 +24,10 @@ public class AppointmentController {
     private SecurityConfig securityConfig;
 
     @GetMapping
-    public ResponseEntity<List<Appointment>> getAllAppointment(){
+    public ResponseEntity<List<Appointment>> getAllAppointment(@RequestHeader("Authorization") String authorizationHeader){
 //        return appointmentService.getAllAppointment();
-        return ResponseEntity.ok(appointmentService.getAllAppointment());
+        User userDetails = securityConfig.GetUserDetails(authorizationHeader.replace("Basic ", ""));
+        return ResponseEntity.ok(appointmentService.getAllAppointment(userDetails));
     }
 
     @PostMapping

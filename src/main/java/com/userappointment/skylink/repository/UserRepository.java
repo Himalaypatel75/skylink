@@ -13,10 +13,8 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long> {
     // Add custom methods if needed
 
-    @Query("SELECT u FROM User u WHERE u.role = :role")
     List<User> findByRole(Role role);
 
-    @Query("SELECT u FROM User u WHERE u.email = :email")
     User findByEmail(String email);
 
     @Query("SELECT u FROM User u WHERE u.role.id IN :roleIds")
