@@ -2,10 +2,14 @@ package com.userappointment.skylink.service;
 import com.userappointment.skylink.models.User;
 import com.userappointment.skylink.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -23,8 +27,18 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<User> getAllUsers(String userName, List<Long> userIds) {
+        if (userName.equals("")){
+            return userRepository.findAll();
+        }else{
+            if (userIds == null) {
+                userIds = Collections.emptyList();
+            }
+//            System.out.println("this is user ids...!");
+            Sort sortByFirstName = Sort.by(Sort.Direction.ASC, "firstName");
+            Pageable pageableobj = PageRequest.of(1, 5).withSort(sortByFirstName);
+            return userRepository.findByLastNameContainsIgnoreCaseOrFirstNameContainsIgnoreCaseOrIdIn(userName, userName, userIds, pageableobj);
+        }
     }
 
     public User getUserById(Long id) {

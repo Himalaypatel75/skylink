@@ -3,7 +3,6 @@ import com.userappointment.skylink.models.User;
 import com.userappointment.skylink.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -19,8 +18,9 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public List<User> getAllUsers(@RequestParam(value = "userName", required = false, defaultValue = "") String userName,
+                                  @RequestParam(value = "userIds", required = false) List<Long> userIds) {
+        return userService.getAllUsers(userName, userIds);
     }
 
     @GetMapping("/{id}")
